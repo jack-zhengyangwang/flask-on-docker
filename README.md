@@ -4,7 +4,7 @@
 
 This repo contains a small Flask web app deployed on a production-style stack modeled on Instagram's architecture: Nginx as the reverse proxy that also serves static and media files, Flask + Gunicorn as the web framework and application server, and PostgreSQL as the database. Every service runs in its own Docker container, coordinated with Docker Compose, and the project has separate development (Flask dev server with live reload) and production (Gunicorn behind Nginx, multi-stage image, non-root user) configurations. The app itself is intentionally minimal. The point was to assemble a stack I can reuse for larger projects. It can upload an image and serve it back.
 
-![Demo of uploading and viewing an image](Flask_on_Docker_Demo.mov)
+![Demo of uploading and viewing an image](demo.gif)
 
 ## Build Instructions
 
