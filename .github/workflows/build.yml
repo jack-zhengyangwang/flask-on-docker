@@ -1,0 +1,40 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env.dev
+        run: |
+          cat > .env.dev <<'ENV'
+          FLASK_APP=project/__init__.py
+          FLASK_DEBUG=1
+          DATABASE_URL=postgresql://hello_flask:hello_flask@db:5432/hello_flask_dev
+          SQL_HOST=db
+          SQL_PORT=5432
+          DATABASE=postgres
+          APP_FOLDER=/usr/src/app
+          ENV
+
+      - name: Build and start dev stack
+        run: docker compose up -d --build
+
+      - name: Check the web app responds
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:1147/ && exit 0
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+
+      - name: Shut down
+        if: always()
+        run: docker compose down -v
